@@ -13,3 +13,10 @@ docker volume inspect artifactory_volume || docker volume create artifactory_vol
 #build and run jenkins
 docker build -t artifactory:ci_env ./dockerfiles/artifactory
 docker run --name artifactory -d -p 8081:8081 -p 8082:8082 -v artifactory_volume:/var/opt/jfrog/artifactory artifactory:ci_env
+
+#---Start slave---
+#TO DO
+#clone application and compile jar file
+#build and run slave
+docker build -t slave:ci_env -f ./dockerfiles/slave/Dockerfile .
+docker run --name slave -d -p 8083:8080 slave:ci_env
