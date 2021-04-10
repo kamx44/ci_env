@@ -23,3 +23,8 @@ docker run --name selenium-hub -d -p 4444:4444 --net docker_network selenium-hub
 #--Start Selenium Node
 docker build -t selenium-node:ci_env ./dockerfiles/selenium/node
 docker run --name selenium-node -d --net docker_network selenium-node:ci_env
+
+
+#--Start slave server
+docker build -t ubuntuslave:ci_env ./dockerfiles/slave
+docker run --name slave -t -d --net docker_network -v /var/run/docker.sock:/var/run/docker.sock -p 8088:8088 ubuntuslave:ci_env

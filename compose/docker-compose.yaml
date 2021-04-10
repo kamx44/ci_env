@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+    jenkins:
+        build: ../dockerfiles/jenkins
+        image: jenkins:ci_env
+        container_name: jenkins
+        ports:
+        - "8880:8080"
+        - "50000:50000"
+        volumes:
+        - jenkins_volume:/var/jenkins_home
+        networks:
+        - docker_network
+    artifactory:
+        build: ../dockerfiles/artifactory
+        image: artifactory:ci_env
+        container_name: artifactory
+        ports:
+        - "8081:8081"
+        - "8082:8082"
+        volumes:
+        - artifactory_volume:/var/opt/jfrog/artifactory
+        networks:
+        - docker_network
+    selenium-hub:
+        build: ../dockerfiles/selenium/hub
+        image: selenium-hub:ci_env
+        container_name: selenium-hub
+        ports:
+        - "4444:4444"
+        networks:
+        - docker_network
+    selenium-node:
+        build: ../dockerfiles/selenium/node
+        image: selenium-node:ci_env
+        container_name: selenium-node
+        networks:
+        - docker_network
+    slave:
+        build: ../dockerfiles/slave
+        image: ubuntuslave:ci_env
+        container_name: slave
+        ports:
+        - "8088:8088"
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+        - docker_network
+
+volumes:
+    jenkins_volume:
+    artifactory_volume:
+
+networks:
+    docker_network:
