@@ -1,5 +1,19 @@
-FROM openjdk:11.0
-ARG JAR_FILE="target/*.jar"
-COPY ${JAR_FILE} app.jar
-EXPOSE 8088
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM ubuntu:18.04
+WORKDIR /home
+COPY *.jar agent.jar
+RUN apt-get update && apt-get install -y \
+    curl \
+    openjdk-11-jdk \
+    git \
+    maven
+RUN adduser --disabled-password --gecos '' jenkins
+RUN apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
