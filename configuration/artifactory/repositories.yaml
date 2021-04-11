@@ -1,0 +1,19 @@
+localRepositories:
+  libs-release-local:
+    type: maven
+    checksumPolicyType: client-checksums   #Determines how Artifactory behaves when a client checksum for a deployed resource is missing or conflicts with the locally calculated checksum
+    description: "Releases"   #A free text field that describes the content and purpose of the repository
+    notes: "Releases"   #A free text field to add additional notes about the repository
+    repoLayout: maven-2-default   #Sets the layout that the repository should use for storing and identifying modules. The layout usually varies for the different package types
+    snapshotVersionBehavior: unique #Specifies the naming convention for Maven SNAPSHOT versions
+    handleReleases: true   #If set, Artifactory allows you to deploy release artifacts into this repository
+    handleSnapshots: true   #If set, Artifactory allows you to deploy snapshot artifacts into this repository
+  libs-snapshot-local:
+    type: maven
+    checksumPolicyType: client-checksums   #Determines how Artifactory behaves when a client checksum for a deployed resource is missing or conflicts with the locally calculated checksum
+    description: "Releases"   #A free text field that describes the content and purpose of the repository
+    notes: "Releases"   #A free text field to add additional notes about the repository
+    repoLayout: maven-2-default   #Sets the layout that the repository should use for storing and identifying modules. The layout usually varies for the different package types
+    snapshotVersionBehavior: unique #Specifies the naming convention for Maven SNAPSHOT versions
+    handleReleases: true   #If set, Artifactory allows you to deploy release artifacts into this repository
+    handleSnapshots: true   #If set, Artifactory allows you to deploy snapshot artifacts into this repository
