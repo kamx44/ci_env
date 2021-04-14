@@ -3,11 +3,13 @@
 function init()
 {
     echo "Init function"
+    currentpath=`pwd`
     cd compose
     docker-compose up -d --build
     sleep 60
-    cd ../
-    ./configuration/artifactory/import.sh
+    cd {$currentpath}/configuration/artifactory
+    import.sh
+    cd {$currentpath}/configuration/jenkins
 }
 
 function compose()
