@@ -60,6 +60,7 @@ jenkins:
       users:
       - id: "admin"
         name: "kamil"
+        password: "AdminJenkins930"
         properties:
         - "myView"
         - preferredProvider:
@@ -71,6 +72,19 @@ jenkins:
         - favoriting:
             autofavoriteEnabled: true
         - "favorite"
+      - id: "dev"
+        password: "dev"
+    authorizationStrategy:
+      globalMatrix:
+        permissions:
+          - "Job/Build:dev"
+          - "Job/Cancel:dev"
+          - "Job/Read:dev"
+          - "Job/Workspace:dev"
+          - "Overall/Administer:admin"
+          - "Overall/Read:authenticated"
+          - "Run/Replay:dev"
+          - "Run/Update:dev"
   slaveAgentPort: 50000
   updateCenter:
     sites:

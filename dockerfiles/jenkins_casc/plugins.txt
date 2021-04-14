@@ -2,7 +2,6 @@ configuration-as-code
 job-dsl
 
 blueocean
-pipeline
 workflow-job
 workflow-cps
 config-file-provider
