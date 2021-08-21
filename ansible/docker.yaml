@@ -1,0 +1,55 @@
+---
+#################### PRESENT ########################
+    - name: Install 'yum-utils', 'lvm2' and 'device-mapper-persistent-data'
+      package:
+        name: '{{ item }}'
+        state: latest
+      with_items:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+
+    - name: Install docker repository
+      yum_repository:
+        name: '{{ item.name }}'
+        description: '{{ item.desc }}'
+        file: docker-ce
+        baseurl: '{{ item.baseurl }}'
+        enabled: '1'
+        gpgcheck: yes
+        gpgkey: 'https://download.docker.com/linux/centos/gpg'
+        state: present
+      with_items:
+        - { name: 'docker-ce-stable', desc: 'Docker CE Stable - $basearch', baseurl: 'https://download.docker.com/linux/centos/7/$basearch/stable'}
+        - { name: 'docker-ce-edge', desc: 'Docker CE Edge - $basearch', baseurl: 'https://download.docker.com/linux/centos/7/$basearch/edge'}
+        - { name: 'docker-ce-test', desc: 'Docker CE Test - $basearch', baseurl: 'https://download.docker.com/linux/centos/7/$basearch/test'}
+
+    - name: Install docker
+      package:
+        name: '{{ item }}'
+        state: latest
+      with_items:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+
+    - name: Start docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+
+
+    - name: Create docker group
+      group:
+        name: docker
+        state: present
+        system: yes
+
+    - name: Add kamil to docker group
+      user:
+        name: kamil
+        groups: docker
+        append: yes
+

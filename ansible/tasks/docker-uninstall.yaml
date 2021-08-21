@@ -1,0 +1,57 @@
+    #################### ABSENT ########################
+# systemctl status docker
+    - name: Stop and disable docker service
+      service:
+        name: docker
+        enabled: no
+        state: stopped
+      register: docker_service_result
+      failed_when: "docker_service_result is failed and 'Could not find the requested service' not in docker_service_result.msg"
+
+# grep /etc/group -e "docker"
+    - name: Remove docker group
+      group:
+        name: docker
+        state: absent
+        system: yes
+
+    - name: Remove 'docker', 'yum-utils', 'lvm2' and 'device-mapper-persistent-data' packages
+      package:
+        name: '{{ item }}'
+        state: absent
+      with_items:
+        - docker
+        - docker-client
+        - docker-client-latest
+        - docker-common
+        - docker-latest
+        - docker-latest-logrotate
+        - docker-logrotate
+        - docker-engine
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - lvm2
+        - device-mapper-persistent-data
+        - yum-utils
+
+# sudo vi /etc/yum.repos.d/docker-ce.repo
+    - name: Remove docker repository
+      yum_repository:
+        name: docker-ce
+        state: absent
+
+
+    - name: Test Docker with hello world example
+      shell: 'docker run hello-world'
+      register: hello_world_output
+
+    - name: Show output of hello word example
+      debug:
+        msg: 'Container output: {{ hello_world_output.stdout }}'
+
+
+            - name: Reboot server
+      shell: 'sleep 1 && reboot'
+      async: 1
+      poll: 0

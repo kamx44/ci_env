@@ -1,0 +1,35 @@
+---
+- name: Deployment of Jenkins
+  hosts: centos
+  become: true
+  tasks:
+    - name: Install docker
+      include: docker.yaml
+    
+    - name: Test Docker version
+      shell: 'docker --version'
+      register: version
+
+    - debug: msg="{{ version.stdout }}"
+
+    - name: Install Docker Compose
+      get_url: 
+        url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+
+    - name: Add executable permission to docker compose
+      ansible.builtin.file:
+        path: '/usr/local/bin/docker-compose'
+        mode: +x
+    
+    - name: Create link for docker compose
+      ansible.builtin.file:
+        src: '/usr/local/bin/docker-compose'
+        dest: '/usr/bin/docker-compose'
+        state: link
+
+    - name: Test Docker Compose version
+      shell: 'docker-compose --version'
+      register: version
+
+    - debug: msg="{{ version.stdout }}"
